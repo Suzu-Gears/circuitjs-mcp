@@ -1,6 +1,6 @@
 # circuitjs-mcp
 
-Falstad **CircuitJS1** 回路シミュレータを Claude Code / Claude Desktop から操作できるようにする MCP サーバーです。
+Falstad **CircuitJS1** 回路シミュレータを AI エージェントから操作できるようにする MCP サーバーです。標準の stdio MCP サーバーなので、Claude Code、Codex CLI、Claude Desktop、Cursor など MCP 対応クライアントならどれでも使えます。
 
 コンパイル済みの CircuitJS1 ウェブアプリ（`webapp/` に同梱、オフライン動作）をヘッドレス Chromium (Playwright) 内で起動し、その [JavaScript インターフェース](https://www.falstad.com/circuit/doc/js-interface.html) を MCP ツールとして公開します。シミュレータの状態はツール呼び出しをまたいで保持されます（回路を読み込む → 走らせる → 測る → 回路を書き換える、が対話的にできます）。
 
@@ -20,33 +20,39 @@ npm test             # スモークテスト（RC回路の過渡応答が理論�
 export CIRCUITJS_CHROMIUM="/usr/bin/google-chrome"   # 例
 ```
 
-## Claude Code への登録
+## MCP クライアントへの登録
 
-```bash
-claude mcp add circuitjs -- node /絶対パス/circuitjs-mcp/server.mjs
-```
+起動コマンドはどのクライアントでも共通です: `node /絶対パス/circuitjs-mcp/server.mjs`
 
-ブラウザウィンドウを表示して人間も同じシミュレータを直接操作したい場合（共同作業モード）:
+環境変数 `CIRCUITJS_HEADFUL=1` を付けるとブラウザウィンドウが表示され、人間もエージェントと同じシミュレータを直接操作できます（共同作業モード）。以下の例はすべてこの変数付きです。不要なら外してください。
+
+**Claude Code:**
 
 ```bash
 claude mcp add circuitjs -e CIRCUITJS_HEADFUL=1 -- node /絶対パス/circuitjs-mcp/server.mjs
 ```
 
-Claude Desktop の場合は `claude_desktop_config.json` に:
-
-```json
-{
-  "mcpServers": {
-    "circuitjs": { "command": "node", "args": ["/絶対パス/circuitjs-mcp/server.mjs"] }
-  }
-}
-```
-
-標準の stdio MCP サーバーなので、他の MCP クライアントでも使えます。Codex CLI なら:
+**Codex CLI:**
 
 ```bash
 codex mcp add circuitjs --env CIRCUITJS_HEADFUL=1 -- node /絶対パス/circuitjs-mcp/server.mjs
 ```
+
+**設定ファイル方式のクライアント**（Claude Desktop の `claude_desktop_config.json`、Cursor の `mcp.json` など）:
+
+```json
+{
+  "mcpServers": {
+    "circuitjs": {
+      "command": "node",
+      "args": ["/絶対パス/circuitjs-mcp/server.mjs"],
+      "env": { "CIRCUITJS_HEADFUL": "1" }
+    }
+  }
+}
+```
+
+`screenshot` ツールは MCP の画像コンテンツとして PNG を返します。画像表示に対応しないクライアントでは `save_path` 引数でファイルに保存する運用にしてください。
 
 ## ツール一覧
 
@@ -61,7 +67,7 @@ codex mcp add circuitjs --env CIRCUITJS_HEADFUL=1 -- node /絶対パス/circuitj
 | `screenshot` | 現在の回路図の PNG スクリーンショット（画像として返却、ファイル保存も可） |
 | `eval_js` | 上記で足りない操作用のエスケープハッチ。`sim` オブジェクトに対して任意の JS を実行 |
 
-### 使用例（Claude への指示イメージ）
+### 使用例（エージェントへの指示イメージ）
 
 - 「1kΩと1µFのRCローパスを組んで、1kHz矩形波を入れたときの出力波形を5ms分取得して」
 - 「この回路（テキスト貼り付け）を読み込んで、各抵抗の消費電力を一覧にして」

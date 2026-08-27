@@ -1,7 +1,7 @@
 {
   "name": "circuitjs-mcp",
   "version": "1.0.0",
-  "description": "MCP server exposing the Falstad CircuitJS1 circuit simulator (headless Chromium) to Claude Code / Claude Desktop / any MCP client",
+  "description": "MCP server exposing the Falstad CircuitJS1 circuit simulator (headless Chromium) to any MCP client - Claude Code, Codex CLI, Claude Desktop, Cursor, etc.",
   "author": "Suzu (涼鈴)",
   "repository": {
     "type": "git",
