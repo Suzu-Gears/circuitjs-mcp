@@ -2,6 +2,8 @@
 
 Falstad **CircuitJS1** 回路シミュレータを AI エージェントから操作できるようにする MCP サーバーです。標準の stdio MCP サーバーなので、Claude Code、Codex CLI、Claude Desktop、Cursor など MCP 対応クライアントならどれでも使えます。
 
+CircuitJS1 とは、Paul Falstad 氏の回路シミュレータ——古くは Java アプレット版 **「Circuit Simulator Applet」** として親しまれ、現在は [falstad.com/circuit](https://www.falstad.com/circuit/) でブラウザ上で動いているもの——の HTML5/JavaScript 版の名称です。ブラウザの Java アプレット対応終了に伴い Iain Sharp 氏が GWT で JavaScript に移植したもので、シミュレーションエンジンも回路テキスト形式もアプレット版と共通です（アプレット時代の回路ファイルがそのまま読めます）。本サーバーが利用する JavaScript インターフェースは CircuitJS1 になってから追加された機能で、アプレット版にはありません。
+
 コンパイル済みの CircuitJS1 ウェブアプリ（`webapp/` に同梱、オフライン動作）をヘッドレス Chromium (Playwright) 内で起動し、その [JavaScript インターフェース](https://www.falstad.com/circuit/doc/js-interface.html) を MCP ツールとして公開します。シミュレータの状態はツール呼び出しをまたいで保持されます（回路を読み込む → 走らせる → 測る → 回路を書き換える、が対話的にできます）。
 
 ## セットアップ
