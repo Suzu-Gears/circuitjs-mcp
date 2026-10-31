@@ -34,8 +34,8 @@ def add_link(doc, url):
     p.add_run(url)
 
 # Paths
-original_path = '/Users/vladimirhohlov/Downloads/ПР1 перетворювачі кодів(1).docx'
-backup_path = '/Users/vladimirhohlov/Downloads/ПР1 перетворювачі кодів(1)_backup4.docx'
+original_path = '/Users/vladimirhohlov/Downloads/Хохлов 381.docx'
+backup_path = '/Users/vladimirhohlov/Downloads/Хохлов 381_backup_script.docx'
 # Create backup
 import shutil
 shutil.copyfile(original_path, backup_path)
@@ -116,7 +116,7 @@ for task in tasks:
     add_paragraph(doc, task['description'])
     add_table(doc, task['truth'])
     add_image(doc, task['screenshot'], caption=f'Скріншот схеми для {task["title"]}')
-    add_link(doc, task['link'])
+    # add_link(doc, task['link'])  # Links omitted per Falstad rules
     if task.get('extra_paragraphs'):
         add_paragraph(doc, 'Особливості відображення букв:')
         for p in task['extra_paragraphs']:
